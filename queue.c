@@ -173,7 +173,6 @@ void q_reverse(queue_t *q)
             q->head->next = prev;
             prev = q->head;
             q->head = current;
-            // q->head = q->head->next;
         }
         q->head->next = prev;
     }
@@ -188,4 +187,81 @@ void q_sort(queue_t *q)
 {
     /* TODO: You need to write the code for this function */
     /* TODO: Remove the above comment when you are about to implement. */
+    if (!q || !q->head || !q->head->next) {
+        return;
+    }
+    q->head = mergeSortList(q->head);
+    list_ele_t *tmp = q->head;
+    while (tmp->next) {
+        tmp = tmp->next;
+    }
+    q->tail = tmp;
+}
+
+list_ele_t *merge(list_ele_t *lhs, list_ele_t *rhs)
+{
+    list_ele_t *head = NULL, *tmp = NULL;
+    if (lhs && rhs) {
+        if (strcmp(lhs->value, rhs->value) < 0) {
+            head = lhs;
+            lhs = lhs->next;
+        } else {
+            head = rhs;
+            rhs = rhs->next;
+        }
+    }
+    tmp = head;
+    while (lhs && rhs) {
+        if (strcmp(lhs->value, rhs->value) < 0) {
+            tmp->next = lhs;
+            tmp = tmp->next;
+            lhs = lhs->next;
+        } else {
+            tmp->next = rhs;
+            tmp = tmp->next;
+            rhs = rhs->next;
+        }
+    }
+    if (lhs)
+        tmp->next = lhs;
+    if (rhs)
+        tmp->next = rhs;
+    return head;
+    // // merge with recursive
+    // if (!rhs){
+    //     return lhs;
+    // }
+    // if (!lhs){
+    //     return rhs;
+    // }
+    // if (strcmp(lhs->value, rhs->value) < 0) {
+    //     lhs->next = merge(lhs->next, rhs);
+    //     return lhs;
+    // } else {
+    //     rhs->next = merge(lhs, rhs->next);
+    //     return rhs;
+    // }
+}
+
+list_ele_t *mergeSortList(list_ele_t *head)
+{
+    // merge sort
+    if (!head || !head->next)
+        return head;
+    list_ele_t *fast = head->next;
+    list_ele_t *slow = head;
+
+    // split list
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    fast = slow->next;
+    slow->next = NULL;
+
+    // sort each list
+    list_ele_t *lhs = mergeSortList(head);
+    list_ele_t *rhs = mergeSortList(fast);
+    // merge sorted lhs and sorted rhs
+    return merge(lhs, rhs);
 }
