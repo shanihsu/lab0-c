@@ -227,20 +227,6 @@ list_ele_t *merge(list_ele_t *lhs, list_ele_t *rhs)
     if (rhs)
         tmp->next = rhs;
     return head;
-    // // merge with recursive
-    // if (!rhs){
-    //     return lhs;
-    // }
-    // if (!lhs){
-    //     return rhs;
-    // }
-    // if (strcmp(lhs->value, rhs->value) < 0) {
-    //     lhs->next = merge(lhs->next, rhs);
-    //     return lhs;
-    // } else {
-    //     rhs->next = merge(lhs, rhs->next);
-    //     return rhs;
-    // }
 }
 
 list_ele_t *mergeSortList(list_ele_t *head)
